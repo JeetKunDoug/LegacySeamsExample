@@ -6,21 +6,21 @@ namespace MessageManager
 {
 	public class MessageCreator
 	{
-		private static Queue<XDocument> messageQueue = new Queue<XDocument>();
+		IMessageSender sender;
 
-		public static XDocument GetNextMessage ()
+		public MessageCreator (IMessageSender sender)
 		{
-			return messageQueue.Dequeue ();
+			this.sender = sender;
 		}
 
-		public MessageCreator ()
+		public MessageCreator(): this(new MessageSender())
 		{
 		}
 
 		public void CreateAndSendMessage(int id, string otherData) 
 		{
 			XDocument message = this.CreateMessage(id, otherData);
-			this.SendMessage(message);
+			this.sender.SendMessage(message);
 		}
 
 		private XDocument CreateMessage(int id, string otherData) 
@@ -41,14 +41,6 @@ namespace MessageManager
 			             )
 				);
 			return doc;
-		}
-
-		private void SendMessage(XDocument message) 
-		{
-			// Send the message across the wire to somewhere
-			// This message mutates state in another system, which is bad for unit testing the MessageCreator
-			// for now, just add the message to an in-memory queue
-			MessageCreator.messageQueue.Enqueue (message);
 		}
 	}
 }

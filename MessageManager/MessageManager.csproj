@@ -44,6 +44,8 @@
     <Compile Include="MessageCreator.cs" />
     <Compile Include="MessageManagerTests.cs" />
     <Compile Include="MessageManagerIntegrationTests.cs" />
+    <Compile Include="MessageSender.cs" />
+    <Compile Include="IMessageSender.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>
