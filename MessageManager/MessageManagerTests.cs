@@ -20,7 +20,8 @@ namespace MessageManager
 			var repo = new Mock<IDataRepository>(MockBehavior.Strict);
 			sender.Setup (s => s.SendMessage(It.IsAny<XDocument>()))
 				.Callback<XDocument>(d => result = d);
-			repo.Setup(r => r.GetData(id)).Returns(new XDocument(new XElement("Document", new XAttribute("Id", this.id))));
+			repo.Setup(r => r.GetData(id))
+				.Returns(new XDocument(new XElement("Document", new XAttribute("Id", this.id))));
 
 			var creator = new MessageCreator(sender.Object, repo.Object);
 			creator.CreateAndSendMessage(id, otherData);
