@@ -7,13 +7,15 @@ namespace MessageManager
 	public class MessageCreator
 	{
 		IMessageSender sender;
+		IDataRepository repository;
 
-		public MessageCreator (IMessageSender sender)
+		public MessageCreator (IMessageSender sender, IDataRepository repository)
 		{
 			this.sender = sender;
+			this.repository = repository;
 		}
 
-		public MessageCreator(): this(new MessageSender())
+		public MessageCreator(): this(new MessageSender(), new DataRepository())
 		{
 		}
 
@@ -25,22 +27,11 @@ namespace MessageManager
 
 		private XDocument CreateMessage(int id, string otherData) 
 		{
-			var data = this.GetDataFromDatabase(id);
+			var data = this.repository.GetData(id);
 			data.Element ("Document").Add (
 				new XElement("AdditionalData", otherData)
 				);
 			return data;
-		}
-
-		private XDocument GetDataFromDatabase (int id)
-		{
-			// In the real world, this actually calls a stored procedure which returns XML
-			var doc = new XDocument(
-				new XElement("Document", 
-			             new XAttribute("Id", id)
-			             )
-				);
-			return doc;
 		}
 	}
 }
